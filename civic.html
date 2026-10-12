@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CivicConnect - Civic Complaint Management Portal</title>
+
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f8fc;
+            color: #243247;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        section {
+            scroll-margin-top: 90px;
+        }
+
+        .container {
+            width: 84%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            background: white;
+            box-shadow: 0 2px 10px #dce4ef;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #174a8b;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: #2677d5;
+        }
+
+        .navbar nav {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .navbar nav a {
+            font-size: 14px;
+            font-weight: bold;
+            color: #46566b;
+        }
+
+        .navbar nav a:hover {
+            color: #2677d5;
+        }
+
+        .nav-button {
+            background: #2677d5;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(120deg, #e7f1ff, #f7faff);
+            padding: 80px 8%;
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            align-items: center;
+            gap: 45px;
+        }
+
+        .tagline {
+            color: #2677d5;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            font-size: clamp(34px, 4vw, 52px);
+            line-height: 1.2;
+            color: #18375f;
+            margin: 18px 0;
+        }
+
+        .hero h1 span {
+            color: #2677d5;
+        }
+
+        .hero p {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-align: center;
+        }
+
+        .primary-btn {
+            background: #2677d5;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #174a8b;
+        }
+
+        .secondary-btn {
+            background: white;
+            color: #2677d5;
+            border: 1px solid #c9dcf5;
+            margin-left: 8px;
+        }
+
+        .secondary-btn:hover {
+            background: #e9f2ff;
+        }
+
+        .hero-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px #d8e4f3;
+        }
+
+        .city-icon {
+            font-size: 65px;
+            text-align: center;
+            padding: 20px;
+            background: #edf4ff;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hero-card h2 {
+            color: #18375f;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .hero-card p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        /* Statistics */
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 40px 8%;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px 12px;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid #e2eaf4;
+        }
+
+        .stat-card .icon {
+            font-size: 28px;
+        }
+
+        .stat-card h2 {
+            color: #2677d5;
+            font-size: 30px;
+            margin: 5px 0;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Common Sections */
+        .section {
+            padding: 70px 8%;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .section-heading h2 {
+            color: #18375f;
+            font-size: 32px;
+            margin: 10px 0;
+        }
+
+        .section-heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* Complaint Categories */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .category-card {
+            background: white;
+            padding: 25px;
+            border: 1px solid #e2eaf4;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px #dce6f3;
+            border-color: #9bc3f5;
+        }
+
+        .category-icon {
+            display: inline-block;
+            background: #edf4ff;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+
+        .category-card h3 {
+            color: #24466f;
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .category-card p {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        /* Complaint Form */
+        .report-section {
+            background: #eaf2fc;
+        }
+
+        .complaint-form {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px #dce6f3;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #344761;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d4deea;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #243247;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: 2px solid #b5d5ff;
+            border-color: #2677d5;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            width: 100%;
+        }
+
+        .form-note {
+            font-size: 12px;
+            color: #718096;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* Complaint Tracking */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid #e2eaf4;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th,
+        td {
+            padding: 17px 20px;
+            border-bottom: 1px solid #e7edf5;
+            font-size: 13px;
+        }
+
+        th {
+            background: #eaf2ff;
+            color: #24466f;
+        }
+
+        td {
+            color: #53657b;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f7faff;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .submitted {
+            background: #fff0c2;
+            color: #875b05;
+        }
+
+        .progress {
+            background: #deebff;
+            color: #1857a6;
+        }
+
+        .resolved {
+            background: #d9f7e5;
+            color: #197044;
+        }
+
+        /* Call To Action */
+        .cta-section {
+            background: #183b70;
+            color: white;
+            text-align: center;
+            padding: 60px 8%;
+        }
+
+        .cta-section h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .cta-section p {
+            color: #d5e2f4;
+            margin-bottom: 22px;
+        }
+
+        .cta-button {
+            background: white;
+            color: #1e5ca9;
+        }
+
+        .cta-button:hover {
+            background: #e7f0ff;
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            padding: 30px 8%;
+            text-align: center;
+        }
+
+        footer h2 {
+            color: #174a8b;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            color: #718096;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 16px 5%;
+            }
+
+            .navbar nav {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 55px 7%;
+            }
+
+            .statistics {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 30px 6%;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section {
+                padding: 55px 6%;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .navbar nav {
+                gap: 12px;
+            }
+
+            .navbar nav a {
+                font-size: 12px;
+            }
+
+            .nav-button {
+                font-size: 11px;
+                padding: 9px 11px;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+
+            .hero-buttons .btn {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .statistics {
+                gap: 12px;
+            }
+
+            .stat-card h2 {
+                font-size: 25px;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .complaint-form {
+                padding: 22px 16px;
+            }
+
+            .section-heading h2,
+            .cta-section h2 {
+                font-size: 26px;
+            }
+
+            th,
+            td {
+                padding: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <a href="#home" class="logo">Civic<span>Connect</span></a>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#categories">Services</a>
+            <a href="#report">Report Issue</a>
+            <a href="#complaints">Track Complaints</a>
+        </nav>
+
+        <a href="#report" class="nav-button">Report an Issue</a>
+    </header>
+
+    <main>
+
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div>
+                <span class="tagline">YOUR CITY, YOUR VOICE</span>
+
+                <h1>
+                    Let's Build a Better
+                    <span>Community Together.</span>
+                </h1>
+
+                <p>
+                    Report civic problems in your neighbourhood and help
+                    make your city cleaner, safer and better for everyone.
+                    Your voice can make a difference.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#report" class="btn primary-btn">
+                        Report a Complaint
+                    </a>
+
+                    <a href="#complaints" class="btn secondary-btn">
+                        Track Complaints
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-card">
+                <div class="city-icon">🏙️</div>
+
+                <h2>Small Actions. Big Changes.</h2>
+
+                <p>
+                    Together, citizens and local authorities can create
+                    cleaner and safer neighbourhoods.
+                </p>
+
+                <p>✓ Easy complaint submission</p>
+                <p>✓ Transparent status tracking</p>
+                <p>✓ Better community participation</p>
+            </div>
+        </section>
+
+        <!-- Dashboard Statistics -->
+        <section class="statistics">
+            <div class="stat-card">
+                <div class="icon">📋</div>
+                <h2>120</h2>
+                <p>Total Complaints</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">⏳</div>
+                <h2>35</h2>
+                <p>In Progress</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">✅</div>
+                <h2>75</h2>
+                <p>Resolved Issues</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">📨</div>
+                <h2>10</h2>
+                <p>New Complaints</p>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="section" id="categories">
+            <div class="section-heading">
+                <span class="tagline">CIVIC SERVICES</span>
+                <h2>What Issue Are You Facing?</h2>
+                <p>Select a category to report a problem in your area.</p>
+            </div>
+
+            <div class="category-grid">
+
+                <a href="#report" class="category-card">
+                    <div class="category-icon">🗑️</div>
+                    <h3>Garbage Collection</h3>
+                    <p>Report waste accumulation and unclean public places.</p>
+                </a>
+
+                <a href="#report" class="category-card">
+                    <div class="category-icon">🛣️</div>
+                    <h3>Roads and Potholes</h3>
+                    <p>Report damaged roads and potholes.</p>
+                </a>
+
+                <a href="#report" class="category-card">
+                    <div class="category-icon">💧</div>
+                    <h3>Water Leakage</h3>
+                    <p>Report water leaks and supply problems.</p>
+                </a>
+
+                <a href="#report" class="category-card">
+                    <div class="category-icon">💡</div>
+                    <h3>Streetlights</h3>
+                    <p>Report damaged or non-working streetlights.</p>
+                </a>
+
+                <a href="#report" class="category-card">
+                    <div class="category-icon">🚰</div>
+                    <h3>Drainage Problems</h3>
+                    <p>Report blocked drains and waterlogging.</p>
+                </a>
+
+                <a href="#report" class="category-card">
+                    <div class="category-icon">🏘️</div>
+                    <h3>Other Issues</h3>
+                    <p>Report other public infrastructure problems.</p>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Complaint Form -->
+        <section class="section report-section" id="report">
+            <div class="section-heading">
+                <span class="tagline">RAISE YOUR VOICE</span>
+                <h2>Report a Civic Complaint</h2>
+                <p>Fill in the details below to describe the issue.</p>
+            </div>
+
+            <form class="complaint-form">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Complaint Category</label>
+
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="Garbage">Garbage Collection</option>
+                            <option value="Roads">Roads and Potholes</option>
+                            <option value="Water">Water Leakage</option>
+                            <option value="Streetlights">Streetlights</option>
+                            <option value="Drainage">Drainage Problems</option>
+                            <option value="Other">Other Issues</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Issue Location</label>
+                        <input type="text" id="location" name="location" placeholder="Enter your street or area"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Complaint Description</label>
+                    <textarea id="description" name="description" placeholder="Describe the problem in detail..."
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">Upload Issue Photo (Optional)</label>
+                    <input type="file" id="photo" name="photo" accept="image/*">
+                </div>
+
+                <button type="button" class="btn primary-btn submit-btn">
+                    Submit Complaint
+                </button>
+
+                <p class="form-note">
+                    This is a frontend demonstration. Complaints are not
+                    stored or submitted to a server.
+                </p>
+
+            </form>
+        </section>
+
+        <!-- Complaint Tracking -->
+        <section class="section" id="complaints">
+            <div class="section-heading">
+                <span class="tagline">STAY INFORMED</span>
+                <h2>Recent Complaint Status</h2>
+                <p>Example records showing different complaint statuses.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Complaint ID</th>
+                            <th>Issue</th>
+                            <th>Location</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>CC001</td>
+                            <td>Garbage Collection</td>
+                            <td>Anna Nagar</td>
+                            <td>10 Oct 2026</td>
+                            <td>
+                                <span class="status progress">
+                                    In Progress
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>CC002</td>
+                            <td>Road Pothole</td>
+                            <td>Velachery</td>
+                            <td>09 Oct 2026</td>
+                            <td>
+                                <span class="status resolved">
+                                    Resolved
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>CC003</td>
+                            <td>Water Leakage</td>
+                            <td>Tambaram</td>
+                            <td>11 Oct 2026</td>
+                            <td>
+                                <span class="status submitted">
+                                    Submitted
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <h2>Your Community Deserves Better.</h2>
+            <p>
+                Notice a civic problem? Take the first step towards fixing it.
+            </p>
+
+            <a href="#report" class="btn cta-button">
+                Report an Issue Today
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <h2>CivicConnect</h2>
+
+        <p>
+            Building better communities through citizen participation.
+        </p>
+
+        <p>
+            &copy; 2026 CivicConnect | Academic Project Demonstration
+        </p>
+    </footer>
+
+</body>
+
+</html>
